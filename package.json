@@ -1,0 +1,11 @@
+{
+  "name": "exercicios-backend-funcoes",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:cubos-academy/exercicios-backend-funcoes.git",
+  "author": "Gilson Alves <gilsonalvesdesouza@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ts-node": "^10.9.1"
+  }
+}
