@@ -18,7 +18,7 @@ interface CarrinhoInterface {
   calculaDesconto: Function;
 }
 
-const calcularTotalAPagar = (carrinho: CarrinhoInterface) => {
+const calcularTotalAPagar = () => {
   let totalAPagar = 0;
   for (let item of carrinho.produtos) {
     totalAPagar += (item.precoUnit / 100) * item.qtd;
@@ -26,7 +26,7 @@ const calcularTotalAPagar = (carrinho: CarrinhoInterface) => {
   return totalAPagar;
 };
 
-const calcularTotalDeItens = (carrinho: CarrinhoInterface) => {
+const calcularTotalDeItens = () => {
   let totalItem = 0;
   for (let item of carrinho.produtos) {
     totalItem += item.qtd;
@@ -34,20 +34,19 @@ const calcularTotalDeItens = (carrinho: CarrinhoInterface) => {
   return totalItem;
 };
 
-const resumoCarrinho = ({
-  nomeDoCliente: cliente,
-  produtos,
-}: CarrinhoInterface) => {
+const resumoCarrinho = () => {
   let totalAPagar = 0;
   let quantidadeItem = 0;
 
-  for (let produto of produtos) {
+  for (let produto of carrinho.produtos) {
     totalAPagar += (produto.precoUnit / 100) * produto.qtd;
     quantidadeItem += produto.qtd;
   }
 
   console.log(
-    `Cliente: ${cliente}\nTotal de itens: ${carrinho.calcularTotalDeItens(
+    `Cliente: ${
+      carrinho.nomeDoCliente
+    }\nTotal de itens: ${carrinho.calcularTotalDeItens(
       carrinho
     )}\nTotal a Pagar ${format.currency(
       carrinho.calcularTotalAPagar(carrinho)
@@ -55,10 +54,7 @@ const resumoCarrinho = ({
   );
 };
 
-const addProdutoAoCarrinho = (
-  carrinho: CarrinhoInterface,
-  produto: ProdutosInterface
-) => {
+const addProdutoAoCarrinho = (produto: ProdutosInterface) => {
   const { produtos } = carrinho;
   for (let [index, value] of produtos.entries()) {
     if (value.id === produto.id) {
@@ -69,7 +65,8 @@ const addProdutoAoCarrinho = (
   carrinho.produtos.push(produto);
 };
 
-const imprimirDetalhes = ({ nomeDoCliente, produtos }: CarrinhoInterface) => {
+const imprimirDetalhes = () => {
+  const { nomeDoCliente, produtos } = carrinho;
   console.log(`\nCliente: ${nomeDoCliente}\n`);
   for (let item of produtos) {
     console.log(
@@ -109,10 +106,10 @@ const carrinho: CarrinhoInterface = {
   calcularTotalAPagar,
   calcularTotalDeItens,
   calculaDesconto: () => {
-    const totalItens = calcularTotalDeItens(carrinho);
-    const valorTotal = calcularTotalAPagar(carrinho);
+    const totalItens = calcularTotalDeItens();
     let valores = [];
     let valorAcimaQuatro = 0;
+    const totalAPagar = calcularTotalAPagar();
 
     if (totalItens > 4) {
       for (let item of carrinho.produtos) {
@@ -122,7 +119,7 @@ const carrinho: CarrinhoInterface = {
       valorAcimaQuatro = menorValor;
     }
 
-    const desconto10PorCento = totalItens * 0.9;
+    const desconto10PorCento = totalAPagar * 0.1;
 
     valorAcimaQuatro > desconto10PorCento
       ? console.log(
@@ -148,10 +145,10 @@ const novoTenis: ProdutosInterface = {
   precoUnit: 10000,
 };
 
-carrinho.addProduto(carrinho, novaBermuda);
-carrinho.addProduto(carrinho, novoTenis);
+carrinho.addProduto(novaBermuda);
+carrinho.addProduto(novoTenis);
 
-carrinho.resumoCarrinho(carrinho);
+carrinho.resumoCarrinho();
 carrinho.imprimirDetalhes(carrinho);
 
 carrinho.calculaDesconto();
